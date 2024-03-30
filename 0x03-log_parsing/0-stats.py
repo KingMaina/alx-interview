@@ -8,10 +8,10 @@ import signal
 
 def print_statistics(log_metadata: dict):
     """Prints the log statistics of requests"""
-    print(f"File size: {log_metadata['total_file_size']}")
+    print("File size: {}".format(log_metadata['total_file_size']))
     for stat_code, count in sorted(log_metadata['status_code_count'].items()):
         if count > 0:
-            print(f"{stat_code}: {count}")
+            print("{}: {}".format(stat_code, count))
 
 
 def signal_handler(sig, frame):
