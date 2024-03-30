@@ -6,30 +6,54 @@ import re
 import signal
 
 
-def print_statistics(total_file_size, status_code_count):
+def print_statistics(log_metadata: dict):
     """Prints the log statistics of requests"""
-    print(f"Total file size: {total_file_size}")
-    for status_code, count in sorted(status_code_count.items()):
+    print(f"Total file size: {log_metadata['total_file_size']}")
+    for stat_code, count in sorted(log_metadata['status_code_count'].items()):
         if count > 0:
-            print(f"{status_code}: {count}")
+            print(f"{stat_code}: {count}")
 
 
 def signal_handler(sig, frame):
     """Handles the CTRL+C command signal"""
-    print_statistics()
+    print_statistics(log_metadata)
     sys.exit(0)
 
 
 # Registering signal handler for CTRL+C
-signal.signal(signal.SIGINT, signal_handler)
+
+# <IPAddress> - [<date>] "GET /projects/260 HTTP/1.1" <status code> <file size>
+LOG_PATTERN = re.compile((r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
+               r' - \[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6})\] '
+               r'\"GET /projects/(\d+) HTTP/1\.1" (\d{3}) (\d+)$'))
 
 
-# <IP Address> - [<date>] "GET /projects/260 HTTP/1.1" <status code> <file size>
-LOG_PATTERN = r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - \[(\d{2}/(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/\d{4}:\d{2}:\d{2}:\d{2} [+-]\d{4})\] \"GET /projects/(\d+) HTTP/1\.1" (\d{3}) (\d+)$'
-def read_input():
-    line_count: int = 0
-    total_file_size: int = 0
-    status_code_count = {
+def read_input(log_metadata: dict):
+    """Read api request logs and update the log metadata"""
+    try:
+        for line in sys.stdin:
+            # Filter out logs that match the valid pattern
+            matchedLog = re.match(LOG_PATTERN, line)
+
+            # Keep track of valid logs only
+            if matchedLog:
+                log_metadata['line_count'] += 1
+                status_code = int(matchedLog.group(4))
+                log_metadata['total_file_size'] += int(matchedLog.group(5))
+                log_metadata['status_code_count'][status_code] += 1
+
+                # Log statistics after every 10 requests
+                if log_metadata['line_count'] % 10 == 0:
+                    print_statistics(log_metadata)
+    except Exception as error:
+        print_statistics(log_metadata)
+        raise error
+
+
+log_metadata: dict = {
+    'line_count': 0,
+    'total_file_size': 0,
+    'status_code_count': {
         200: 0,
         301: 0,
         400: 0,
@@ -39,15 +63,6 @@ def read_input():
         405: 0,
         500: 0
     }
-    for line in sys.stdin:
-        line_count += 1
-        # Remove new line
-        # line = line.rstrip()
-        matchedLog = re.match(LOG_PATTERN, line)
-        if matchedLog:
-            status_code = matchedLog.group(4)
-            print(status_code)
-
-
-if __name__ == "__main__":
-    print(read_input())
+}
+signal.signal(signal.SIGINT, signal_handler)
+read_input(log_metadata)
