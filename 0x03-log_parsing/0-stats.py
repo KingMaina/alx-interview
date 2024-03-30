@@ -8,7 +8,7 @@ import signal
 
 def print_statistics(log_metadata: dict):
     """Prints the log statistics of requests"""
-    print(f"Total file size: {log_metadata['total_file_size']}")
+    print(f"File size: {log_metadata['total_file_size']}")
     for stat_code, count in sorted(log_metadata['status_code_count'].items()):
         if count > 0:
             print(f"{stat_code}: {count}")
@@ -23,9 +23,9 @@ def signal_handler(sig, frame):
 # Registering signal handler for CTRL+C
 
 # <IPAddress> - [<date>] "GET /projects/260 HTTP/1.1" <status code> <file size>
-LOG_PATTERN = re.compile((r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
-               r' - \[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6})\] '
-               r'\"GET /projects/(\d+) HTTP/1\.1" (\d{3}) (\d+)$'))
+LOG_PATTERN = re.compile(r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) '
+               r'- \[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6})\] '
+               r'\"GET /projects/(\d+) HTTP/1\.1" (\d{3}) (\d+)$')
 
 
 def read_input(log_metadata: dict):
