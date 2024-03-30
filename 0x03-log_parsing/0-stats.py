@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 """Log parser from stdin and computes metrics"""
 import sys
