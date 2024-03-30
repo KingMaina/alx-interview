@@ -40,7 +40,8 @@ def read_input(log_metadata: dict):
             if matchedLog:
                 status_code = int(matchedLog.group(4))
                 log_metadata['total_file_size'] += int(matchedLog.group(5))
-                log_metadata['status_code_count'][status_code] += 1
+                if status_code in log_metadata['status_code_count'].keys():
+                    log_metadata['status_code_count'][status_code] += 1
 
             # Log statistics after every 10 requests
             if log_metadata['line_count'] % 10 == 0:
