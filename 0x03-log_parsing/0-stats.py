@@ -32,19 +32,19 @@ def read_input(log_metadata: dict):
     """Read api request logs and update the log metadata"""
     try:
         for line in sys.stdin:
+            log_metadata['line_count'] += 1
             # Filter out logs that match the valid pattern
             matchedLog = re.match(LOG_PATTERN, line)
 
             # Keep track of valid logs only
             if matchedLog:
-                log_metadata['line_count'] += 1
                 status_code = int(matchedLog.group(4))
                 log_metadata['total_file_size'] += int(matchedLog.group(5))
                 log_metadata['status_code_count'][status_code] += 1
 
-                # Log statistics after every 10 requests
-                if log_metadata['line_count'] % 10 == 0:
-                    print_statistics(log_metadata)
+            # Log statistics after every 10 requests
+            if log_metadata['line_count'] % 10 == 0:
+                print_statistics(log_metadata)
     except Exception as error:
         print_statistics(log_metadata)
         raise error
