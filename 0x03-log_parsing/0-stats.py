@@ -62,7 +62,7 @@ def read_input(log_metadata: dict):
             # Log statistics after every 10 requests
             if log_metadata['line_count'] % 10 == 0:
                 print_statistics(log_metadata)
-    finally:
+    except Exception as error:
         print_statistics(log_metadata)
 
 
