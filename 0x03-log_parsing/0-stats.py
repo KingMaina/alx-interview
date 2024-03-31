@@ -24,7 +24,8 @@ log_metadata: dict = {
 
 def print_statistics(log_metadata: dict):
     """Prints the log statistics of requests"""
-    print("File size: {}".format(log_metadata['total_file_size']), flush=True)
+    if log_metadata['total_file_size'] > 0:
+        print("File size: {}".format(log_metadata['total_file_size']), flush=True)
     for stat_code, count in sorted(log_metadata['status_code_count'].items()):
         if count > 0:
             print("{}: {}".format(stat_code, count), flush=True)
