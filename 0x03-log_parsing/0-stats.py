@@ -24,10 +24,10 @@ log_metadata: dict = {
 
 def print_statistics(log_metadata: dict):
     """Prints the log statistics of requests"""
-    print("File size: {}".format(log_metadata['total_file_size']))
+    print("File size: {}".format(log_metadata['total_file_size']), flush=True)
     for stat_code, count in sorted(log_metadata['status_code_count'].items()):
         if count > 0:
-            print("{}: {}".format(stat_code, count))
+            print("{}: {}".format(stat_code, count), flush=True)
 
 
 def signal_handler(sig, frame):
@@ -51,18 +51,17 @@ def read_input(log_metadata: dict):
 
             # Keep track of valid logs only
             if matchedLog:
-                log_metadata['line_count'] += 1
                 status_code = int(matchedLog.group(4))
                 log_metadata['total_file_size'] += int(matchedLog.group(5))
                 if status_code in log_metadata['status_code_count'].keys():
                     log_metadata['status_code_count'][status_code] += 1
 
+            log_metadata['line_count'] += 1
             # Log statistics after every 10 requests
             if log_metadata['line_count'] % 10 == 0:
                 print_statistics(log_metadata)
-    except Exception as error:
+    finally:
         print_statistics(log_metadata)
-        raise error
 
 
 # Registering signal handler for CTRL+C
