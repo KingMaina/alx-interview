@@ -25,7 +25,7 @@ def signal_handler(sig, frame):
 # <IPAddress> - [<date>] "GET /projects/260 HTTP/1.1" <status code> <file size>
 LOG_PATTERN = re.compile(r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) '
                          r'- \[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6})\] '
-                         r'\"GET /projects/(\d+) HTTP/1\.1" (\d{3}) (\d+)$')
+                         r'"GET /projects/(\d+) HTTP/1\.1" (\d{3}) (\d+)$')
 
 
 def read_input(log_metadata: dict):
