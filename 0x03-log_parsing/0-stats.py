@@ -32,7 +32,6 @@ def print_statistics(log_metadata: dict):
 
 def signal_handler(sig, frame):
     """Handles the CTRL+C command signal"""
-    print_statistics(log_metadata)
     sys.exit(0)
 
 
@@ -62,7 +61,7 @@ def read_input(log_metadata: dict):
             # Log statistics after every 10 requests
             if log_metadata['line_count'] % 10 == 0:
                 print_statistics(log_metadata)
-    except Exception as error:
+    finally:
         print_statistics(log_metadata)
 
 
