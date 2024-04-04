@@ -42,4 +42,7 @@ def validUTF8(data):
             if index_position >= data_len or data[index_position] >> 6 != 2:
                 return False
             index_position += 1
+    # Check incorrect byte sequence
+    if index_position < data_len:
+        return False
     return True
