@@ -15,12 +15,31 @@ def validUTF8(data: List[int]) -> bool:
         -------
             True if `data` is valid UTF-8, False otherwise
     """
-    for number in data:
-        # Shift bits and check UTF-8 adherance
-        for i in range(8):
-            # Shift the LSB and AND with 1 to check for byte order
-            if number >> (7 - i) & 1 == 1:
-                return False
+    BITS_IN_A_BYTE: int = 8
+    index_position: int = 0
+    while index_position < len(data):
+        number_of_bytes: int = 0
+        for bit in range(BITS_IN_A_BYTE):
+            if data[bit] >> (7 - bit) & 1 == 1:
+                number_of_bytes += 1
             else:
-                return True
-    return False
+                break
+        # If leading bits is 0, then it's single byte ASCII
+        if number_of_bytes == 0:
+            index_position += 1
+            continue
+        # For multi-byte, the format must be:
+        # 110xxxxx, 1110xxxx or 11110xxx so 2, 3 or 4 bytes
+        if number_of_bytes == 1 or number_of_bytes > 4:
+            return False
+
+        # Go to next byte
+        index_position += 1
+        # Check subsequent bytes start with format: 10xxxxxx
+        for _ in range(number_of_bytes):
+            # Right shifting by 6 ensures valid byte formats
+            # have 10 at the end which is equal to 2
+            if data[index_position] >> 6 != 2:
+                return False
+            index_position += 1
+    return True
