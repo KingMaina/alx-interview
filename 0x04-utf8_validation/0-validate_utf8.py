@@ -3,7 +3,7 @@
 from typing import List
 
 
-def validUTF8(data: List[int]) -> bool:
+def validUTF8(data):
     """Validate if a list of integers are valid UTF-8 encoded
 
         Parameters
@@ -16,9 +16,9 @@ def validUTF8(data: List[int]) -> bool:
             True if `data` is valid UTF-8, False otherwise
     """
     BITS_IN_A_BYTE = 8
-    index_position: int = 0
+    index_position = 0
     while index_position < len(data):
-        number_of_bytes: int = 0
+        number_of_bytes = 0
         for bit in range(BITS_IN_A_BYTE):
             if data[bit] >> (7 - bit) & 1 == 1:
                 number_of_bytes += 1
