@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """A function that validates data if it is UTF-8 encoded"""
-from typing import List
 
 
 def validUTF8(data):
