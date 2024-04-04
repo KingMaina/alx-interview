@@ -15,7 +15,7 @@ def validUTF8(data: List[int]) -> bool:
         -------
             True if `data` is valid UTF-8, False otherwise
     """
-    BITS_IN_A_BYTE: int = 8
+    BITS_IN_A_BYTE = 8
     index_position: int = 0
     while index_position < len(data):
         number_of_bytes: int = 0
