@@ -17,7 +17,7 @@ def validUTF8(data):
     BITS_IN_A_BYTE = 8
     index_position = 0
     data_len = len(data)
-    while index_position < len(data_len):
+    while index_position < data_len:
         number_of_bytes = 0
         for bit in range(BITS_IN_A_BYTE):
             if data[bit] >> (7 - bit) & 1 == 1:
