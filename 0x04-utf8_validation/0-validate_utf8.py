@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """A function that validates data if it is UTF-8 encoded"""
 from typing import List
 
