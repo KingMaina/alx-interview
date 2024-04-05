@@ -20,7 +20,9 @@ def validUTF8(data):
     while index_position < data_len:
         number_of_bytes = 0
         for bit in range(BITS_IN_A_BYTE):
-            if data[bit] >> (7 - bit) & 1 == 1:
+            # Shift LSB to the MSB position and check for
+            # a valid UTF-8 start bits
+            if data[index_position] >> (7 - bit) & 1 == 1:
                 number_of_bytes += 1
             else:
                 break
