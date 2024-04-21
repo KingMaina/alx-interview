@@ -1,0 +1,15 @@
+{
+  "name": "vagrant",
+  "version": "1.0.0",
+  "description": "A repo on various programming challenges for hte ALX tasks on interview questions.",
+  "main": "0-starwars_characters.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.88.2"
+  }
+}
